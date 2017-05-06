@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>util module &mdash; code_court  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="code_court  documentation" href="index.html"/>
+        <link rel="next" title="views package" href="views.html"/>
+        <link rel="prev" title="setup module" href="setup.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> code_court
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="event_loop.html">event_loop module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gunicorn_config.html">gunicorn_config module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">model module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">setup module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">util module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views.html">views package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web.html">web module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">code_court</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>util module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/util.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-util">
+<span id="util-module"></span><h1>util module<a class="headerlink" href="#module-util" title="Permalink to this headline">¶</a></h1>
+<dl class="exception">
+<dt id="util.ModelMissingException">
+<em class="property">exception </em><code class="descclassname">util.</code><code class="descname">ModelMissingException</code><a class="reference internal" href="_modules/util.html#ModelMissingException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.ModelMissingException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.checkbox_result_to_bool">
+<code class="descclassname">util.</code><code class="descname">checkbox_result_to_bool</code><span class="sig-paren">(</span><em>res</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util.html#checkbox_result_to_bool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.checkbox_result_to_bool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes in a checkbox result from a form and converts it to a bool</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>res (str): the result string from a checkbox</dd>
+<dt>Returns:</dt>
+<dd>bool: the boolean value of res</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.get_configuration">
+<code class="descclassname">util.</code><code class="descname">get_configuration</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util.html#get_configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.get_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>get specified config</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.get_model">
+<code class="descclassname">util.</code><code class="descname">get_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/util.html#get_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.get_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the model from the current app,</p>
+<dl class="docutils">
+<dt>Note:</dt>
+<dd>must be called from within a request context</dd>
+<dt>Raises:</dt>
+<dd>ModelMissingException: if the model is not accessible from the current_app</dd>
+<dt>Returns:</dt>
+<dd>the model module</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.hash_password">
+<code class="descclassname">util.</code><code class="descname">hash_password</code><span class="sig-paren">(</span><em>plaintext_password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util.html#hash_password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.hash_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hashes a password with bcrypt</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>plaintext_password (str): a plaintext string to be hashed</dd>
+<dt>Returns:</dt>
+<dd>str: a bcrpyt hash</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.is_password_matching">
+<code class="descclassname">util.</code><code class="descname">is_password_matching</code><span class="sig-paren">(</span><em>plaintext_password</em>, <em>hashed_password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util.html#is_password_matching"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.is_password_matching" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether a plaintext password matches a bcrypt hashed password</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>plaintext_password (str): the plaintext password to compare
+hashed_password (str): the bcrypt hashed password to compare</dd>
+<dt>Returns:</dt>
+<dd>bool: whether or not the passwords match</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.jwt_authenticate">
+<code class="descclassname">util.</code><code class="descname">jwt_authenticate</code><span class="sig-paren">(</span><em>email</em>, <em>password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util.html#jwt_authenticate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.jwt_authenticate" title="Permalink to this definition">¶</a></dt>
+<dd><p>authenticate the user</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.jwt_identity">
+<code class="descclassname">util.</code><code class="descname">jwt_identity</code><span class="sig-paren">(</span><em>payload</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util.html#jwt_identity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.jwt_identity" title="Permalink to this definition">¶</a></dt>
+<dd><p>get user identity</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.login_required">
+<code class="descclassname">util.</code><code class="descname">login_required</code><span class="sig-paren">(</span><em>role='ANY'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util.html#login_required"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.login_required" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="util.ssl_required">
+<code class="descclassname">util.</code><code class="descname">ssl_required</code><span class="sig-paren">(</span><em>fn</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util.html#ssl_required"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.ssl_required" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="views.html" class="btn btn-neutral float-right" title="views package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="setup.html" class="btn btn-neutral" title="setup module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Ben Doan, Sam Nobbs, Micah Swab, Josiah Krutz.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,361 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>util &mdash; code_court  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="code_court  documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> code_court
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../event_loop.html">event_loop module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gunicorn_config.html">gunicorn_config module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model.html">model module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup.html">setup module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">util module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../views.html">views package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../web.html">web module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">code_court</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>util</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for util</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">wraps</span>
+
+<span class="kn">import</span> <span class="nn">bcrypt</span>
+
+<span class="kn">from</span> <span class="nn">flask_login</span> <span class="k">import</span> <span class="n">current_user</span>
+
+<span class="kn">from</span> <span class="nn">flask</span> <span class="k">import</span> <span class="n">current_app</span><span class="p">,</span> <span class="n">request</span>
+
+<div class="viewcode-block" id="ModelMissingException"><a class="viewcode-back" href="../util.html#util.ModelMissingException">[docs]</a><span class="k">class</span> <span class="nc">ModelMissingException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="get_model"><a class="viewcode-back" href="../util.html#util.get_model">[docs]</a><span class="k">def</span> <span class="nf">get_model</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gets the model from the current app,</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        must be called from within a request context</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ModelMissingException: if the model is not accessible from the current_app</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        the model module</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">current_app</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ModelMissingException</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">model</span></div>
+
+<div class="viewcode-block" id="hash_password"><a class="viewcode-back" href="../util.html#util.hash_password">[docs]</a><span class="k">def</span> <span class="nf">hash_password</span><span class="p">(</span><span class="n">plaintext_password</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Hashes a password with bcrypt</span>
+
+<span class="sd">    Params:</span>
+<span class="sd">        plaintext_password (str): a plaintext string to be hashed</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: a bcrpyt hash</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">current_app</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TESTING&#39;</span><span class="p">):</span>
+        <span class="c1"># reduce number of rounds for quicker tests</span>
+        <span class="n">num_rounds</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">num_rounds</span> <span class="o">=</span> <span class="mi">10</span>
+
+    <span class="n">hashed_password</span> <span class="o">=</span> <span class="n">bcrypt</span><span class="o">.</span><span class="n">hashpw</span><span class="p">(</span><span class="n">plaintext_password</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">),</span> <span class="n">bcrypt</span><span class="o">.</span><span class="n">gensalt</span><span class="p">(</span><span class="n">num_rounds</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">hashed_password</span></div>
+
+<div class="viewcode-block" id="is_password_matching"><a class="viewcode-back" href="../util.html#util.is_password_matching">[docs]</a><span class="k">def</span> <span class="nf">is_password_matching</span><span class="p">(</span><span class="n">plaintext_password</span><span class="p">,</span> <span class="n">hashed_password</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks whether a plaintext password matches a bcrypt hashed password</span>
+
+<span class="sd">    Params:</span>
+<span class="sd">        plaintext_password (str): the plaintext password to compare</span>
+<span class="sd">        hashed_password (str): the bcrypt hashed password to compare</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: whether or not the passwords match</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">bcrypt</span><span class="o">.</span><span class="n">hashpw</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">plaintext_password</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">hashed_password</span><span class="p">))</span> <span class="o">==</span> <span class="n">hashed_password</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">bcrypt</span><span class="o">.</span><span class="n">hashpw</span><span class="p">(</span><span class="n">plaintext_password</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span> <span class="n">hashed_password</span><span class="p">)</span> <span class="o">==</span> <span class="n">hashed_password</span></div>
+
+<div class="viewcode-block" id="login_required"><a class="viewcode-back" href="../util.html#util.login_required">[docs]</a><span class="k">def</span> <span class="nf">login_required</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;ANY&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">decorated_view</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">current_user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
+              <span class="k">return</span> <span class="n">current_app</span><span class="o">.</span><span class="n">login_manager</span><span class="o">.</span><span class="n">unauthorized</span><span class="p">()</span>
+
+            <span class="n">role_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">current_user</span><span class="o">.</span><span class="n">user_roles</span><span class="p">]</span>
+            <span class="k">if</span> <span class="p">((</span><span class="n">role</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">role_ids</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">role</span> <span class="o">!=</span> <span class="s2">&quot;ANY&quot;</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="n">current_app</span><span class="o">.</span><span class="n">login_manager</span><span class="o">.</span><span class="n">unauthorized</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">decorated_view</span>
+    <span class="k">return</span> <span class="n">wrapper</span></div>
+
+<div class="viewcode-block" id="checkbox_result_to_bool"><a class="viewcode-back" href="../util.html#util.checkbox_result_to_bool">[docs]</a><span class="k">def</span> <span class="nf">checkbox_result_to_bool</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Takes in a checkbox result from a form and converts it to a bool</span>
+
+<span class="sd">    Params:</span>
+<span class="sd">        res (str): the result string from a checkbox</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: the boolean value of res</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">res</span> <span class="o">==</span> <span class="s2">&quot;on&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="n">res</span> <span class="o">==</span> <span class="s2">&quot;off&quot;</span> <span class="ow">or</span> <span class="n">res</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="jwt_authenticate"><a class="viewcode-back" href="../util.html#util.jwt_authenticate">[docs]</a><span class="k">def</span> <span class="nf">jwt_authenticate</span><span class="p">(</span><span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;authenticate the user&quot;&quot;&quot;</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">user</span> <span class="ow">and</span> <span class="n">user</span><span class="o">.</span><span class="n">verify_password</span><span class="p">(</span><span class="n">password</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">user</span></div>
+
+<div class="viewcode-block" id="jwt_identity"><a class="viewcode-back" href="../util.html#util.jwt_identity">[docs]</a><span class="k">def</span> <span class="nf">jwt_identity</span><span class="p">(</span><span class="n">payload</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;get user identity&quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">get_model</span><span class="p">()</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s1">&#39;identity&#39;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">user_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="get_configuration"><a class="viewcode-back" href="../util.html#util.get_configuration">[docs]</a><span class="k">def</span> <span class="nf">get_configuration</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;get specified config&quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">get_model</span><span class="p">()</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Configuration</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+    <span class="n">val_type</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">valType</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">val_type</span> <span class="o">==</span> <span class="s2">&quot;integer&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">val_type</span> <span class="o">==</span> <span class="s2">&quot;bool&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">val_type</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="ssl_required"><a class="viewcode-back" href="../util.html#util.ssl_required">[docs]</a><span class="k">def</span> <span class="nf">ssl_required</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">decorated_view</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">current_app</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SSL&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">is_secure</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://&quot;</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">decorated_view</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Ben Doan, Sam Nobbs, Micah Swab, Josiah Krutz.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

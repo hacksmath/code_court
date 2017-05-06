@@ -1,0 +1,1014 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>model module &mdash; code_court  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="code_court  documentation" href="index.html"/>
+        <link rel="next" title="setup module" href="setup.html"/>
+        <link rel="prev" title="gunicorn_config module" href="gunicorn_config.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> code_court
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="event_loop.html">event_loop module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gunicorn_config.html">gunicorn_config module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">model module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">setup module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">util module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="views.html">views package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web.html">web module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">code_court</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>model module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/model.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-model">
+<span id="model-module"></span><h1>model module<a class="headerlink" href="#module-model" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="model.Clarification">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">Clarification</code><span class="sig-paren">(</span><em>initiating_user</em>, <em>subject</em>, <em>contents</em>, <em>thread</em>, <em>is_public</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Clarification"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Clarification" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_sqlalchemy.Model</span></code></p>
+<p>Stores information about a user or judge clarification</p>
+<dl class="attribute">
+<dt id="model.Clarification.contents">
+<code class="descname">contents</code><a class="headerlink" href="#model.Clarification.contents" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the contents of the clarification</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Clarification.creation_time">
+<code class="descname">creation_time</code><a class="headerlink" href="#model.Clarification.creation_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>DateTime: the time the clarification was created at</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Clarification.get_output_dict">
+<code class="descname">get_output_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Clarification.get_output_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Clarification.get_output_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Clarification.id">
+<code class="descname">id</code><a class="headerlink" href="#model.Clarification.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Clarification.initiating_user">
+<code class="descname">initiating_user</code><a class="headerlink" href="#model.Clarification.initiating_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Clarification.initiating_user_id">
+<code class="descname">initiating_user_id</code><a class="headerlink" href="#model.Clarification.initiating_user_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>int: a foreignkey to the user that initiated the clarification</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Clarification.is_public">
+<code class="descname">is_public</code><a class="headerlink" href="#model.Clarification.is_public" title="Permalink to this definition">¶</a></dt>
+<dd><p>bool: whether or not the clarification is shown to everyone, or just the intiator</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Clarification.parent">
+<code class="descname">parent</code><a class="headerlink" href="#model.Clarification.parent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Clarification.parent_id">
+<code class="descname">parent_id</code><a class="headerlink" href="#model.Clarification.parent_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>int: a foreignkey to the a parent clarification</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Clarification.problem">
+<code class="descname">problem</code><a class="headerlink" href="#model.Clarification.problem" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Clarification.problem_id">
+<code class="descname">problem_id</code><a class="headerlink" href="#model.Clarification.problem_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>int: a foreignkey to the clarification&#8217;s problem, if it is null, the
+the clarification is general</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Clarification.subject">
+<code class="descname">subject</code><a class="headerlink" href="#model.Clarification.subject" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the title of the clairification, gives brief idea of contents</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Clarification.thread">
+<code class="descname">thread</code><a class="headerlink" href="#model.Clarification.thread" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: this is a uuid that indicates which thread this clarification belongs to</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.Configuration">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">Configuration</code><span class="sig-paren">(</span><em>key</em>, <em>val</em>, <em>valType</em>, <em>category</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_sqlalchemy.Model</span></code></p>
+<p>Stores general configuration information</p>
+<dl class="attribute">
+<dt id="model.Configuration.category">
+<code class="descname">category</code><a class="headerlink" href="#model.Configuration.category" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the config entry category</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Configuration.get_output_dict">
+<code class="descname">get_output_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Configuration.get_output_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Configuration.get_output_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Configuration.id">
+<code class="descname">id</code><a class="headerlink" href="#model.Configuration.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Configuration.key">
+<code class="descname">key</code><a class="headerlink" href="#model.Configuration.key" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the config entry name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Configuration.val">
+<code class="descname">val</code><a class="headerlink" href="#model.Configuration.val" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the config entry val</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Configuration.valType">
+<code class="descname">valType</code><a class="headerlink" href="#model.Configuration.valType" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the type of the config entry val</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.Contest">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">Contest</code><span class="sig-paren">(</span><em>name</em>, <em>start_time</em>, <em>end_time</em>, <em>is_public</em>, <em>activate_time=None</em>, <em>freeze_time=None</em>, <em>deactivate_time=None</em>, <em>users=None</em>, <em>problems=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Contest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Contest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_sqlalchemy.Model</span></code></p>
+<p>Stores information about a contest</p>
+<dl class="attribute">
+<dt id="model.Contest.Run">
+<code class="descname">Run</code><a class="headerlink" href="#model.Contest.Run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Contest.SavedCode">
+<code class="descname">SavedCode</code><a class="headerlink" href="#model.Contest.SavedCode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Contest.activate_time">
+<code class="descname">activate_time</code><a class="headerlink" href="#model.Contest.activate_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>DateTime: the contest&#8217;s activation time, users will be able to see the contest,
+but they will not be able to see the problems or upload submissions</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Contest.deactivate_time">
+<code class="descname">deactivate_time</code><a class="headerlink" href="#model.Contest.deactivate_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>DateTime: the contest will be hidden at this time</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Contest.end_time">
+<code class="descname">end_time</code><a class="headerlink" href="#model.Contest.end_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>DateTime: the time when the contest ends, users will not be able to upload submissions
+after this time</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Contest.freeze_time">
+<code class="descname">freeze_time</code><a class="headerlink" href="#model.Contest.freeze_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>DateTime: the time when the contest&#8217;s scoreboard freezes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Contest.get_output_dict">
+<code class="descname">get_output_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Contest.get_output_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Contest.get_output_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Contest.id">
+<code class="descname">id</code><a class="headerlink" href="#model.Contest.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Contest.is_public">
+<code class="descname">is_public</code><a class="headerlink" href="#model.Contest.is_public" title="Permalink to this definition">¶</a></dt>
+<dd><p>bool: whether or not the contest can be joined/viewed by anyone</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Contest.name">
+<code class="descname">name</code><a class="headerlink" href="#model.Contest.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the contest&#8217;s name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Contest.problems">
+<code class="descname">problems</code><a class="headerlink" href="#model.Contest.problems" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Contest.start_time">
+<code class="descname">start_time</code><a class="headerlink" href="#model.Contest.start_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>DateTime: the contest&#8217;s start time, users will be able to upload submissions at this time</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Contest.users">
+<code class="descname">users</code><a class="headerlink" href="#model.Contest.users" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.Language">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">Language</code><span class="sig-paren">(</span><em>name</em>, <em>syntax_mode</em>, <em>is_enabled</em>, <em>run_script</em>, <em>default_template=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Language"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Language" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_sqlalchemy.Model</span></code></p>
+<p>Stores the configuration for a programming language</p>
+<dl class="attribute">
+<dt id="model.Language.Run">
+<code class="descname">Run</code><a class="headerlink" href="#model.Language.Run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Language.SavedCode">
+<code class="descname">SavedCode</code><a class="headerlink" href="#model.Language.SavedCode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Language.default_template">
+<code class="descname">default_template</code><a class="headerlink" href="#model.Language.default_template" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the languages default template</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.Language.get_output_dict">
+<code class="descname">get_output_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Language.get_output_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Language.get_output_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Language.id">
+<code class="descname">id</code><a class="headerlink" href="#model.Language.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Language.is_enabled">
+<code class="descname">is_enabled</code><a class="headerlink" href="#model.Language.is_enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>bool: whether or not the language is enabled</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Language.name">
+<code class="descname">name</code><a class="headerlink" href="#model.Language.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the language name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Language.run_script">
+<code class="descname">run_script</code><a class="headerlink" href="#model.Language.run_script" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: script (with shebang) that compiles and runs scripts for this language</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Language.syntax_mode">
+<code class="descname">syntax_mode</code><a class="headerlink" href="#model.Language.syntax_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the syntax mode used by the code editor</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.Problem">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">Problem</code><span class="sig-paren">(</span><em>problem_type</em>, <em>slug</em>, <em>name</em>, <em>problem_statement</em>, <em>sample_input</em>, <em>sample_output</em>, <em>secret_input</em>, <em>secret_output</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Problem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Problem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_sqlalchemy.Model</span></code></p>
+<dl class="attribute">
+<dt id="model.Problem.Clarification">
+<code class="descname">Clarification</code><a class="headerlink" href="#model.Problem.Clarification" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Problem.Run">
+<code class="descname">Run</code><a class="headerlink" href="#model.Problem.Run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Problem.SavedCode">
+<code class="descname">SavedCode</code><a class="headerlink" href="#model.Problem.SavedCode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Problem.contests">
+<code class="descname">contests</code><a class="headerlink" href="#model.Problem.contests" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.Problem.get_output_dict">
+<code class="descname">get_output_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Problem.get_output_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Problem.get_output_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Problem.id">
+<code class="descname">id</code><a class="headerlink" href="#model.Problem.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Problem.is_enabled">
+<code class="descname">is_enabled</code><a class="headerlink" href="#model.Problem.is_enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>bool: whether or not the problem is enabled</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Problem.name">
+<code class="descname">name</code><a class="headerlink" href="#model.Problem.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the problem&#8217;s name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Problem.problem_statement">
+<code class="descname">problem_statement</code><a class="headerlink" href="#model.Problem.problem_statement" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the problem statement in markdown format</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Problem.problem_type">
+<code class="descname">problem_type</code><a class="headerlink" href="#model.Problem.problem_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Problem.problem_type_id">
+<code class="descname">problem_type_id</code><a class="headerlink" href="#model.Problem.problem_type_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>int: a foreignkey to the problem&#8217;s problem type</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Problem.sample_input">
+<code class="descname">sample_input</code><a class="headerlink" href="#model.Problem.sample_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the problem&#8217;s sample input, this may be shown to the user</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Problem.sample_output">
+<code class="descname">sample_output</code><a class="headerlink" href="#model.Problem.sample_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the problem&#8217;s sample output, this may be shown to the user</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Problem.secret_input">
+<code class="descname">secret_input</code><a class="headerlink" href="#model.Problem.secret_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the problem&#8217;s secret input, this may be shown to the user</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Problem.secret_output">
+<code class="descname">secret_output</code><a class="headerlink" href="#model.Problem.secret_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the problem&#8217;s secret output, this may be shown to the user</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Problem.slug">
+<code class="descname">slug</code><a class="headerlink" href="#model.Problem.slug" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the problem&#8217;s slug, this is a short (&lt;11 chars) string that is used to identify
+a problem. It can only contain the following characters: a-z, A-Z, 0-1, -, _</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.ProblemType">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">ProblemType</code><span class="sig-paren">(</span><em>name</em>, <em>eval_script</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#ProblemType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.ProblemType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_sqlalchemy.Model</span></code></p>
+<p>Stores information about a problem type</p>
+<dl class="attribute">
+<dt id="model.ProblemType.Problem">
+<code class="descname">Problem</code><a class="headerlink" href="#model.ProblemType.Problem" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.ProblemType.eval_script">
+<code class="descname">eval_script</code><a class="headerlink" href="#model.ProblemType.eval_script" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: script (with shebang) that evaluates this problem type</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.ProblemType.get_output_dict">
+<code class="descname">get_output_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#ProblemType.get_output_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.ProblemType.get_output_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.ProblemType.id">
+<code class="descname">id</code><a class="headerlink" href="#model.ProblemType.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.ProblemType.name">
+<code class="descname">name</code><a class="headerlink" href="#model.ProblemType.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the name of the problem type</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.Run">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">Run</code><span class="sig-paren">(</span><em>user</em>, <em>contest</em>, <em>language</em>, <em>problem</em>, <em>submit_time</em>, <em>source_code</em>, <em>run_input</em>, <em>correct_output</em>, <em>is_submission</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_sqlalchemy.Model</span></code></p>
+<p>Stores information about a specific run. This might be a
+submission, or just a test run</p>
+<dl class="attribute">
+<dt id="model.Run.contest">
+<code class="descname">contest</code><a class="headerlink" href="#model.Run.contest" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.contest_id">
+<code class="descname">contest_id</code><a class="headerlink" href="#model.Run.contest_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>int: a foreignkey to the run&#8217;s contest</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.correct_output">
+<code class="descname">correct_output</code><a class="headerlink" href="#model.Run.correct_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the correct output of the submitted program</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.finished_execing_time">
+<code class="descname">finished_execing_time</code><a class="headerlink" href="#model.Run.finished_execing_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>DateTime: the time the code finished being executed</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="model.Run.get_judging_runs">
+<em class="property">static </em><code class="descname">get_judging_runs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Run.get_judging_runs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Run.get_judging_runs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.Run.get_output_dict">
+<code class="descname">get_output_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Run.get_output_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Run.get_output_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="model.Run.get_unjudged_runs">
+<em class="property">static </em><code class="descname">get_unjudged_runs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#Run.get_unjudged_runs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.Run.get_unjudged_runs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.id">
+<code class="descname">id</code><a class="headerlink" href="#model.Run.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.is_judged">
+<code class="descname">is_judged</code><a class="headerlink" href="#model.Run.is_judged" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.is_judging">
+<code class="descname">is_judging</code><a class="headerlink" href="#model.Run.is_judging" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.is_passed">
+<code class="descname">is_passed</code><a class="headerlink" href="#model.Run.is_passed" title="Permalink to this definition">¶</a></dt>
+<dd><p>bool: indicates whether or not a run has been judged as passing or failing</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.is_priority">
+<code class="descname">is_priority</code><a class="headerlink" href="#model.Run.is_priority" title="Permalink to this definition">¶</a></dt>
+<dd><p>bool: indicates whether or not a run has priority status, which expedites execution</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.is_submission">
+<code class="descname">is_submission</code><a class="headerlink" href="#model.Run.is_submission" title="Permalink to this definition">¶</a></dt>
+<dd><p>bool: if true the run is a submission, if false it&#8217;s a test run</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.language">
+<code class="descname">language</code><a class="headerlink" href="#model.Run.language" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.language_id">
+<code class="descname">language_id</code><a class="headerlink" href="#model.Run.language_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>int: a foreignkey to the run&#8217;s language</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.problem">
+<code class="descname">problem</code><a class="headerlink" href="#model.Run.problem" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.problem_id">
+<code class="descname">problem_id</code><a class="headerlink" href="#model.Run.problem_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>int: a foreignkey to the run&#8217;s problem</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.run_input">
+<code class="descname">run_input</code><a class="headerlink" href="#model.Run.run_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: input text passed to the submitted program</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.run_output">
+<code class="descname">run_output</code><a class="headerlink" href="#model.Run.run_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the output of the submitted program</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.source_code">
+<code class="descname">source_code</code><a class="headerlink" href="#model.Run.source_code" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the submitted source code</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.started_execing_time">
+<code class="descname">started_execing_time</code><a class="headerlink" href="#model.Run.started_execing_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>DateTime: the time the code started being executed</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.state">
+<code class="descname">state</code><a class="headerlink" href="#model.Run.state" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: information about the execution of the program</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.submit_time">
+<code class="descname">submit_time</code><a class="headerlink" href="#model.Run.submit_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>DateTime: the time the code was submitted</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.user">
+<code class="descname">user</code><a class="headerlink" href="#model.Run.user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.Run.user_id">
+<code class="descname">user_id</code><a class="headerlink" href="#model.Run.user_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>int: a foreignkey to the run&#8217;s user</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.SavedCode">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">SavedCode</code><span class="sig-paren">(</span><em>contest</em>, <em>problem</em>, <em>user</em>, <em>language</em>, <em>source_code</em>, <em>last_updated_time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#SavedCode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.SavedCode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_sqlalchemy.Model</span></code></p>
+<p>Stores general configuration information</p>
+<dl class="attribute">
+<dt id="model.SavedCode.contest">
+<code class="descname">contest</code><a class="headerlink" href="#model.SavedCode.contest" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.SavedCode.contest_id">
+<code class="descname">contest_id</code><a class="headerlink" href="#model.SavedCode.contest_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>int: a foreignkey to the saved_code&#8217;s contest</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.SavedCode.get_output_dict">
+<code class="descname">get_output_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#SavedCode.get_output_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.SavedCode.get_output_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.SavedCode.id">
+<code class="descname">id</code><a class="headerlink" href="#model.SavedCode.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.SavedCode.language">
+<code class="descname">language</code><a class="headerlink" href="#model.SavedCode.language" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.SavedCode.language_id">
+<code class="descname">language_id</code><a class="headerlink" href="#model.SavedCode.language_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>int: a foreignkey to the saved_code&#8217;s language</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.SavedCode.last_updated_time">
+<code class="descname">last_updated_time</code><a class="headerlink" href="#model.SavedCode.last_updated_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>DateTime: the time the code was last updated at</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.SavedCode.problem">
+<code class="descname">problem</code><a class="headerlink" href="#model.SavedCode.problem" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.SavedCode.problem_id">
+<code class="descname">problem_id</code><a class="headerlink" href="#model.SavedCode.problem_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>int: a foreignkey to the saved_code&#8217;s problem</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.SavedCode.source_code">
+<code class="descname">source_code</code><a class="headerlink" href="#model.SavedCode.source_code" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the saved source code</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.SavedCode.user">
+<code class="descname">user</code><a class="headerlink" href="#model.SavedCode.user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.SavedCode.user_id">
+<code class="descname">user_id</code><a class="headerlink" href="#model.SavedCode.user_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>int: a foreignkey to the saved_code&#8217;s user</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.User">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">User</code><span class="sig-paren">(</span><em>email</em>, <em>name</em>, <em>password</em>, <em>creation_time=None</em>, <em>misc_data=None</em>, <em>contests=None</em>, <em>user_roles=None</em>, <em>username=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#User"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.User" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_sqlalchemy.Model</span></code>, <code class="xref py py-class docutils literal"><span class="pre">flask_login.UserMixin</span></code></p>
+<p>Stores information about a user</p>
+<dl class="attribute">
+<dt id="model.User.Clarification">
+<code class="descname">Clarification</code><a class="headerlink" href="#model.User.Clarification" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.User.Run">
+<code class="descname">Run</code><a class="headerlink" href="#model.User.Run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.User.SavedCode">
+<code class="descname">SavedCode</code><a class="headerlink" href="#model.User.SavedCode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.User.contests">
+<code class="descname">contests</code><a class="headerlink" href="#model.User.contests" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.User.creation_time">
+<code class="descname">creation_time</code><a class="headerlink" href="#model.User.creation_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the creation time of the user</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.User.email">
+<code class="descname">email</code><a class="headerlink" href="#model.User.email" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the user&#8217;s email</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.User.get_id">
+<code class="descname">get_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#User.get_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.User.get_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.User.get_output_dict">
+<code class="descname">get_output_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#User.get_output_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.User.get_output_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.User.hashed_password">
+<code class="descname">hashed_password</code><a class="headerlink" href="#model.User.hashed_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: a bcrypt hash of the user&#8217;s password</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.User.id">
+<code class="descname">id</code><a class="headerlink" href="#model.User.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.User.is_active">
+<code class="descname">is_active</code><a class="headerlink" href="#model.User.is_active" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.User.is_anonymous">
+<code class="descname">is_anonymous</code><a class="headerlink" href="#model.User.is_anonymous" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.User.is_authenticated">
+<code class="descname">is_authenticated</code><a class="headerlink" href="#model.User.is_authenticated" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.User.merge_metadata">
+<code class="descname">merge_metadata</code><span class="sig-paren">(</span><em>new_metadata_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#User.merge_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.User.merge_metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.User.misc_data">
+<code class="descname">misc_data</code><a class="headerlink" href="#model.User.misc_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: misc data about a user, stored as a json object</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.User.name">
+<code class="descname">name</code><a class="headerlink" href="#model.User.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the user&#8217;s full name, no specific format is assumed</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="model.User.user_roles">
+<code class="descname">user_roles</code><a class="headerlink" href="#model.User.user_roles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.User.username">
+<code class="descname">username</code><a class="headerlink" href="#model.User.username" title="Permalink to this definition">¶</a></dt>
+<dd><p>str: the username, for display</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.User.verify_password">
+<code class="descname">verify_password</code><span class="sig-paren">(</span><em>plainext_password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#User.verify_password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.User.verify_password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.UserRole">
+<em class="property">class </em><code class="descclassname">model.</code><code class="descname">UserRole</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#UserRole"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.UserRole" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_sqlalchemy.Model</span></code></p>
+<p>Stores system user roles</p>
+<dl class="method">
+<dt id="model.UserRole.get_output_dict">
+<code class="descname">get_output_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#UserRole.get_output_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.UserRole.get_output_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.UserRole.id">
+<code class="descname">id</code><a class="headerlink" href="#model.UserRole.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.UserRole.users">
+<code class="descname">users</code><a class="headerlink" href="#model.UserRole.users" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="model.dt_to_date_str">
+<code class="descclassname">model.</code><code class="descname">dt_to_date_str</code><span class="sig-paren">(</span><em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#dt_to_date_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.dt_to_date_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a datetime to a string in format 2017-12-30</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.dt_to_str">
+<code class="descclassname">model.</code><code class="descname">dt_to_str</code><span class="sig-paren">(</span><em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#dt_to_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.dt_to_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a datetime to a string in format 2017-12-30T12:60Z</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.dt_to_time_str">
+<code class="descclassname">model.</code><code class="descname">dt_to_time_str</code><span class="sig-paren">(</span><em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#dt_to_time_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.dt_to_time_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a datetime to a string in format 12:59</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.str_to_dt">
+<code class="descclassname">model.</code><code class="descname">str_to_dt</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#str_to_dt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.str_to_dt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a string in format 2017-12-30T12:60Z to datetime</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.strs_to_dt">
+<code class="descclassname">model.</code><code class="descname">strs_to_dt</code><span class="sig-paren">(</span><em>date_string</em>, <em>time_string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#strs_to_dt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.strs_to_dt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts two strings in formats &#8220;2017-12-30&#8221; and &#8220;12:60&#8221; to datetime</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.time_str_to_dt">
+<code class="descclassname">model.</code><code class="descname">time_str_to_dt</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model.html#time_str_to_dt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.time_str_to_dt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a string in format 12:59 to datetime</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="setup.html" class="btn btn-neutral float-right" title="setup module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="gunicorn_config.html" class="btn btn-neutral" title="gunicorn_config module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Ben Doan, Sam Nobbs, Micah Swab, Josiah Krutz.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

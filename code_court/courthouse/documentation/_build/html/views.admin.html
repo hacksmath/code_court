@@ -1,0 +1,791 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>views.admin package &mdash; code_court  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="code_court  documentation" href="index.html"/>
+        <link rel="up" title="views package" href="views.html"/>
+        <link rel="next" title="web module" href="web.html"/>
+        <link rel="prev" title="views package" href="views.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> code_court
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="event_loop.html">event_loop module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gunicorn_config.html">gunicorn_config module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">model module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">setup module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">util module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="views.html">views package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="views.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">views.admin package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-views.admin.admin">views.admin.admin module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-views.admin.clarifications">views.admin.clarifications module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-views.admin.configurations">views.admin.configurations module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-views.admin.contests">views.admin.contests module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-views.admin.languages">views.admin.languages module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-views.admin.problems">views.admin.problems module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-views.admin.runs">views.admin.runs module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-views.admin.users">views.admin.users module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-views.admin">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#module-views.api">views.api module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#module-views.auth">views.auth module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#module-views.defendant">views.defendant module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#module-views.main">views.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.html#module-views">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="web.html">web module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">code_court</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="views.html">views package</a> &raquo;</li>
+        
+      <li>views.admin package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/views.admin.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="views-admin-package">
+<h1>views.admin package<a class="headerlink" href="#views-admin-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-views.admin.admin">
+<span id="views-admin-admin-module"></span><h2>views.admin.admin module<a class="headerlink" href="#module-views.admin.admin" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="views.admin.admin.index">
+<code class="descclassname">views.admin.admin.</code><code class="descname">index</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/admin.html#index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.admin.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>The index page for the admin interface, contains
+a list of links to other admin pages</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-views.admin.clarifications">
+<span id="views-admin-clarifications-module"></span><h2>views.admin.clarifications module<a class="headerlink" href="#module-views.admin.clarifications" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="views.admin.clarifications.ModelMissingException">
+<em class="property">exception </em><code class="descclassname">views.admin.clarifications.</code><code class="descname">ModelMissingException</code><a class="reference internal" href="_modules/views/admin/clarifications.html#ModelMissingException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.clarifications.ModelMissingException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.clarifications.add_clar">
+<code class="descclassname">views.admin.clarifications.</code><code class="descname">add_clar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/clarifications.html#add_clar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.clarifications.add_clar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds or edits a clarification</p>
+<dl class="docutils">
+<dt>Note:</dt>
+<dd>must be called from within a request context</dd>
+<dt>Returns:</dt>
+<dd>a redirect to the clarification view page</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.clarifications.clarifications_add">
+<code class="descclassname">views.admin.clarifications.</code><code class="descname">clarifications_add</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/clarifications.html#clarifications_add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.clarifications.clarifications_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays the clarification adding and updating page and accepts form submits from those pages.</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>clar_id (int): the clarification to edit, if this is None a new lang will be made</dd>
+<dt>Returns:</dt>
+<dd>a rendered add/edit template or a redirect to the clarification view page</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.clarifications.clarifications_del">
+<code class="descclassname">views.admin.clarifications.</code><code class="descname">clarifications_del</code><span class="sig-paren">(</span><em>clar_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/clarifications.html#clarifications_del"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.clarifications.clarifications_del" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a clarification</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>clar_id (int): the clarification to delete</dd>
+<dt>Returns:</dt>
+<dd>a redirect to the clarification view page</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.clarifications.clarifications_view">
+<code class="descclassname">views.admin.clarifications.</code><code class="descname">clarifications_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/clarifications.html#clarifications_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.clarifications.clarifications_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>The clarifications view page</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>a rendered clarifications view template</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-views.admin.configurations">
+<span id="views-admin-configurations-module"></span><h2>views.admin.configurations module<a class="headerlink" href="#module-views.admin.configurations" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="views.admin.configurations.add_config">
+<code class="descclassname">views.admin.configurations.</code><code class="descname">add_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/configurations.html#add_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.configurations.add_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds or edits a config</p>
+<dl class="docutils">
+<dt>Note:</dt>
+<dd>must be called from within a request context</dd>
+<dt>Returns:</dt>
+<dd>a redirect to the config view page</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.configurations.configurations_add">
+<code class="descclassname">views.admin.configurations.</code><code class="descname">configurations_add</code><span class="sig-paren">(</span><em>config_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/configurations.html#configurations_add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.configurations.configurations_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays the config adding and updating page and accepts form submits from those pages.</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>config_id (int): the config to edit, if this is None a new config will be made</dd>
+<dt>Returns:</dt>
+<dd>a rendered add/edit template or a redirect to the config view page</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.configurations.configurations_del">
+<code class="descclassname">views.admin.configurations.</code><code class="descname">configurations_del</code><span class="sig-paren">(</span><em>config_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/configurations.html#configurations_del"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.configurations.configurations_del" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a config</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>config_id (int): the config to delete</dd>
+<dt>Returns:</dt>
+<dd>a redirect to the config view page</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.configurations.configurations_view">
+<code class="descclassname">views.admin.configurations.</code><code class="descname">configurations_view</code><span class="sig-paren">(</span><em>page</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/configurations.html#configurations_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.configurations.configurations_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>The config view page</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>a rendered config view template</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.configurations.display_config_add_form">
+<code class="descclassname">views.admin.configurations.</code><code class="descname">display_config_add_form</code><span class="sig-paren">(</span><em>config_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/configurations.html#display_config_add_form"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.configurations.display_config_add_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays the config add template</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>config_id (int): config_id</dd>
+<dt>Returns:</dt>
+<dd>a rendered config add/edit template</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.configurations.is_dup_config_key">
+<code class="descclassname">views.admin.configurations.</code><code class="descname">is_dup_config_key</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/configurations.html#is_dup_config_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.configurations.is_dup_config_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if a key is a duplicate of another config</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>key (str): the config key to test</dd>
+<dt>Returns:</dt>
+<dd>bool: True if the email is a duplicate, False otherwise</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-views.admin.contests">
+<span id="views-admin-contests-module"></span><h2>views.admin.contests module<a class="headerlink" href="#module-views.admin.contests" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="views.admin.contests.add_contest">
+<code class="descclassname">views.admin.contests.</code><code class="descname">add_contest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/contests.html#add_contest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.contests.add_contest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds or edits a contest</p>
+<dl class="docutils">
+<dt>Note:</dt>
+<dd>must be called from within a request context</dd>
+<dt>Returns:</dt>
+<dd>a redirect to the contest view page</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.contests.contests_add">
+<code class="descclassname">views.admin.contests.</code><code class="descname">contests_add</code><span class="sig-paren">(</span><em>contest_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/contests.html#contests_add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.contests.contests_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays the contest adding and updating page and accepts form submits from those pages.</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>contest_id (int): the contest to edit, if this is None a new contest will be made</dd>
+<dt>Returns:</dt>
+<dd>a rendered add/edit template or a redirect to the contest view page</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.contests.contests_del">
+<code class="descclassname">views.admin.contests.</code><code class="descname">contests_del</code><span class="sig-paren">(</span><em>contest_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/contests.html#contests_del"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.contests.contests_del" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a contest</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>contest_id (int): the contest to delete</dd>
+<dt>Returns:</dt>
+<dd>a redirect to the contest view page</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.contests.contests_view">
+<code class="descclassname">views.admin.contests.</code><code class="descname">contests_view</code><span class="sig-paren">(</span><em>page</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/contests.html#contests_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.contests.contests_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>The contest view page</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>a rendered contest view template</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.contests.display_contest_add_form">
+<code class="descclassname">views.admin.contests.</code><code class="descname">display_contest_add_form</code><span class="sig-paren">(</span><em>contest_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/contests.html#display_contest_add_form"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.contests.display_contest_add_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays the contest add template</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>contest_id (int): contest_id</dd>
+<dt>Returns:</dt>
+<dd>a rendered contest add/edit template</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.contests.is_dup_contest_name">
+<code class="descclassname">views.admin.contests.</code><code class="descname">is_dup_contest_name</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/contests.html#is_dup_contest_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.contests.is_dup_contest_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if a name is a duplicate of another contest</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>name (str): the contest name to test</dd>
+<dt>Returns:</dt>
+<dd>bool: True if the name is a duplicate, False otherwise</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.contests.problems_from_slugs">
+<code class="descclassname">views.admin.contests.</code><code class="descname">problems_from_slugs</code><span class="sig-paren">(</span><em>problem_slugs</em>, <em>model</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/contests.html#problems_from_slugs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.contests.problems_from_slugs" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns list of problems from problem_slugs</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.contests.users_from_emails">
+<code class="descclassname">views.admin.contests.</code><code class="descname">users_from_emails</code><span class="sig-paren">(</span><em>emails</em>, <em>model</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/contests.html#users_from_emails"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.contests.users_from_emails" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns list of users from email keys</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-views.admin.languages">
+<span id="views-admin-languages-module"></span><h2>views.admin.languages module<a class="headerlink" href="#module-views.admin.languages" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="views.admin.languages.ModelMissingException">
+<em class="property">exception </em><code class="descclassname">views.admin.languages.</code><code class="descname">ModelMissingException</code><a class="reference internal" href="_modules/views/admin/languages.html#ModelMissingException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.languages.ModelMissingException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.languages.add_lang">
+<code class="descclassname">views.admin.languages.</code><code class="descname">add_lang</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/languages.html#add_lang"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.languages.add_lang" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds or edits a language</p>
+<dl class="docutils">
+<dt>Note:</dt>
+<dd>must be called from within a request context</dd>
+<dt>Returns:</dt>
+<dd>a redirect to the language view page</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.languages.display_lang_add_form">
+<code class="descclassname">views.admin.languages.</code><code class="descname">display_lang_add_form</code><span class="sig-paren">(</span><em>lang_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/languages.html#display_lang_add_form"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.languages.display_lang_add_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays the language add template</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>lang_id (int): lang_id</dd>
+<dt>Returns:</dt>
+<dd>a rendered language add/edit template</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.languages.is_dup_lang_name">
+<code class="descclassname">views.admin.languages.</code><code class="descname">is_dup_lang_name</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/languages.html#is_dup_lang_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.languages.is_dup_lang_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if a name is a duplicate of another lang</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>name (str): the lang name to test</dd>
+<dt>Returns:</dt>
+<dd>bool: True if the name is a duplicate, False otherwise</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.languages.languages_add">
+<code class="descclassname">views.admin.languages.</code><code class="descname">languages_add</code><span class="sig-paren">(</span><em>lang_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/languages.html#languages_add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.languages.languages_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays the language adding and updating page and accepts form submits from those pages.</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>lang_id (int): the lang to edit, if this is None a new lang will be made</dd>
+<dt>Returns:</dt>
+<dd>a rendered add/edit template or a redirect to the language view page</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.languages.languages_del">
+<code class="descclassname">views.admin.languages.</code><code class="descname">languages_del</code><span class="sig-paren">(</span><em>lang_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/languages.html#languages_del"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.languages.languages_del" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a language</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>lang_id (int): the language to delete</dd>
+<dt>Returns:</dt>
+<dd>a redirect to the language view page</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.languages.languages_view">
+<code class="descclassname">views.admin.languages.</code><code class="descname">languages_view</code><span class="sig-paren">(</span><em>page</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/languages.html#languages_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.languages.languages_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>The language view page</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>a rendered language view template</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-views.admin.problems">
+<span id="views-admin-problems-module"></span><h2>views.admin.problems module<a class="headerlink" href="#module-views.admin.problems" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="views.admin.problems.add_problem">
+<code class="descclassname">views.admin.problems.</code><code class="descname">add_problem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/problems.html#add_problem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.problems.add_problem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds or edits a problem</p>
+<dl class="docutils">
+<dt>Note:</dt>
+<dd>must be called from within a request context</dd>
+<dt>Returns:</dt>
+<dd>a redirect to the problem view page</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.problems.display_problem_add_form">
+<code class="descclassname">views.admin.problems.</code><code class="descname">display_problem_add_form</code><span class="sig-paren">(</span><em>problem_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/problems.html#display_problem_add_form"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.problems.display_problem_add_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays the problem add template</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>problem_id (int): problem_id</dd>
+<dt>Returns:</dt>
+<dd>a rendered problem add/edit template</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.problems.extract_problem_data">
+<code class="descclassname">views.admin.problems.</code><code class="descname">extract_problem_data</code><span class="sig-paren">(</span><em>problem_zip_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/problems.html#extract_problem_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.problems.extract_problem_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>extract problems from problems in zip file</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.problems.ini_to_dict">
+<code class="descclassname">views.admin.problems.</code><code class="descname">ini_to_dict</code><span class="sig-paren">(</span><em>raw_ini</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/problems.html#ini_to_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.problems.ini_to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="views.admin.problems.is_dup_problem_slug">
+<code class="descclassname">views.admin.problems.</code><code class="descname">is_dup_problem_slug</code><span class="sig-paren">(</span><em>slug</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/problems.html#is_dup_problem_slug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.problems.is_dup_problem_slug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if a slug is a duplicate of another problem</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>slug (str): the problem slug to test</dd>
+<dt>Returns:</dt>
+<dd>bool: True if the slug is a duplicate, False otherwise</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.problems.problems_add">
+<code class="descclassname">views.admin.problems.</code><code class="descname">problems_add</code><span class="sig-paren">(</span><em>problem_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/problems.html#problems_add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.problems.problems_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays the problem adding and updating page and accepts form submits from those pages.</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>problem_id (int): the problem to edit, if this is None a new problem will be made</dd>
+<dt>Returns:</dt>
+<dd>a rendered add/edit template or a redirect to the problem view page</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.problems.problems_batch_upload">
+<code class="descclassname">views.admin.problems.</code><code class="descname">problems_batch_upload</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/problems.html#problems_batch_upload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.problems.problems_batch_upload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Batch adds or updates problems from zip files.</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>None</dd>
+<dt>Returns:</dt>
+<dd>a redirect to the problem view page</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.problems.problems_del">
+<code class="descclassname">views.admin.problems.</code><code class="descname">problems_del</code><span class="sig-paren">(</span><em>problem_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/problems.html#problems_del"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.problems.problems_del" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a problem</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>problem_id (int): the problem to delete</dd>
+<dt>Returns:</dt>
+<dd>a redirect to the problem view page</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.problems.problems_view">
+<code class="descclassname">views.admin.problems.</code><code class="descname">problems_view</code><span class="sig-paren">(</span><em>page</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/problems.html#problems_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.problems.problems_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>The problem view page</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>a rendered problem view template</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-views.admin.runs">
+<span id="views-admin-runs-module"></span><h2>views.admin.runs module<a class="headerlink" href="#module-views.admin.runs" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="views.admin.runs.ModelMissingException">
+<em class="property">exception </em><code class="descclassname">views.admin.runs.</code><code class="descname">ModelMissingException</code><a class="reference internal" href="_modules/views/admin/runs.html#ModelMissingException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.runs.ModelMissingException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.runs.runs_run">
+<code class="descclassname">views.admin.runs.</code><code class="descname">runs_run</code><span class="sig-paren">(</span><em>run_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/runs.html#runs_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.runs.runs_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays the run page</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>run_id (int): the run to view</dd>
+<dt>Returns:</dt>
+<dd>a rendered view run template</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.runs.runs_view">
+<code class="descclassname">views.admin.runs.</code><code class="descname">runs_view</code><span class="sig-paren">(</span><em>page</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/runs.html#runs_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.runs.runs_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>The runs view page</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>a rendered runs view template</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.runs.toggle_priority">
+<code class="descclassname">views.admin.runs.</code><code class="descname">toggle_priority</code><span class="sig-paren">(</span><em>run_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/runs.html#toggle_priority"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.runs.toggle_priority" title="Permalink to this definition">¶</a></dt>
+<dd><p>toggle priority on specified run</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-views.admin.users">
+<span id="views-admin-users-module"></span><h2>views.admin.users module<a class="headerlink" href="#module-views.admin.users" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="views.admin.users.add_user">
+<code class="descclassname">views.admin.users.</code><code class="descname">add_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/users.html#add_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.users.add_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds or edits a user</p>
+<dl class="docutils">
+<dt>Note:</dt>
+<dd>must be called from within a request context</dd>
+<dt>Returns:</dt>
+<dd>a redirect to the user view page</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.users.display_user_add_form">
+<code class="descclassname">views.admin.users.</code><code class="descname">display_user_add_form</code><span class="sig-paren">(</span><em>user_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/users.html#display_user_add_form"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.users.display_user_add_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays the user add template</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>user_id (int): user_id</dd>
+<dt>Returns:</dt>
+<dd>a rendered user add/edit template</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.users.is_dup_user_email">
+<code class="descclassname">views.admin.users.</code><code class="descname">is_dup_user_email</code><span class="sig-paren">(</span><em>email</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/users.html#is_dup_user_email"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.users.is_dup_user_email" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if an email is a duplicate of another user</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>email (str): the user name to test</dd>
+<dt>Returns:</dt>
+<dd>bool: True if the email is a duplicate, False otherwise</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.users.retrieve_by_ids">
+<code class="descclassname">views.admin.users.</code><code class="descname">retrieve_by_ids</code><span class="sig-paren">(</span><em>ids</em>, <em>table</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/users.html#retrieve_by_ids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.users.retrieve_by_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a list of rows from the given table</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>ids (list): the ids of tuples to retrieve
+table     : the table to retrieve rows from</dd>
+<dt>Returns:</dt>
+<dd>list: the rows from the database</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.users.users_add">
+<code class="descclassname">views.admin.users.</code><code class="descname">users_add</code><span class="sig-paren">(</span><em>user_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/users.html#users_add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.users.users_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays the user adding and updating page and accepts form submits from those pages.</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>user_id (int): the user to edit, if this is None a new user will be made</dd>
+<dt>Returns:</dt>
+<dd>a rendered add/edit template or a redirect to the user view page</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.users.users_del">
+<code class="descclassname">views.admin.users.</code><code class="descname">users_del</code><span class="sig-paren">(</span><em>user_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/users.html#users_del"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.users.users_del" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a user</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>user_id (int): the user to delete</dd>
+<dt>Returns:</dt>
+<dd>a redirect to the user view page</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.admin.users.users_view">
+<code class="descclassname">views.admin.users.</code><code class="descname">users_view</code><span class="sig-paren">(</span><em>page</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/admin/users.html#users_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.admin.users.users_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>The user view page</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>a rendered user view template</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-views.admin">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-views.admin" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="web.html" class="btn btn-neutral float-right" title="web module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="views.html" class="btn btn-neutral" title="views package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Ben Doan, Sam Nobbs, Micah Swab, Josiah Krutz.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

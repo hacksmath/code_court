@@ -1,0 +1,485 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>views.admin.users &mdash; code_court  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="code_court  documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> code_court
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../event_loop.html">event_loop module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gunicorn_config.html">gunicorn_config module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../model.html">model module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../setup.html">setup module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../util.html">util module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../views.html">views package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../web.html">web module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">code_court</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>views.admin.users</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for views.admin.users</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sqlalchemy</span>
+
+<span class="kn">import</span> <span class="nn">util</span>
+
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="k">import</span> <span class="n">or_</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.exc</span> <span class="k">import</span> <span class="n">IntegrityError</span>
+
+<span class="kn">from</span> <span class="nn">flask_login</span> <span class="k">import</span> <span class="n">login_required</span><span class="p">,</span> <span class="n">current_user</span>
+
+<span class="kn">from</span> <span class="nn">flask</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">abort</span><span class="p">,</span>
+    <span class="n">Blueprint</span><span class="p">,</span>
+    <span class="n">current_app</span><span class="p">,</span>
+    <span class="n">render_template</span><span class="p">,</span>
+    <span class="n">redirect</span><span class="p">,</span>
+    <span class="n">request</span><span class="p">,</span>
+    <span class="n">url_for</span><span class="p">,</span>
+    <span class="n">flash</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">users</span> <span class="o">=</span> <span class="n">Blueprint</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">,</span> <span class="n">__name__</span><span class="p">,</span>
+                  <span class="n">template_folder</span><span class="o">=</span><span class="s1">&#39;templates/users&#39;</span><span class="p">)</span>
+
+<span class="nd">@users</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">],</span> <span class="n">defaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;page&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+<span class="nd">@users</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&lt;int:page&gt;&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@util</span><span class="o">.</span><span class="n">login_required</span><span class="p">(</span><span class="s2">&quot;operator&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="users_view"><a class="viewcode-back" href="../../../views.admin.html#views.admin.users.users_view">[docs]</a><span class="k">def</span> <span class="nf">users_view</span><span class="p">(</span><span class="n">page</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The user view page</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        a rendered user view template</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+
+    <span class="n">user_search</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;search&quot;</span><span class="p">)</span>
+    <span class="n">user_role</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;user_role&quot;</span><span class="p">)</span>
+
+    <span class="n">users_query</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span>
+
+    <span class="k">if</span> <span class="n">user_search</span><span class="p">:</span>
+        <span class="n">term</span> <span class="o">=</span> <span class="s1">&#39;%&#39;</span> <span class="o">+</span> <span class="n">user_search</span> <span class="o">+</span> <span class="s1">&#39;%&#39;</span>
+        <span class="n">users_query</span> <span class="o">=</span> <span class="n">users_query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">or_</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">ilike</span><span class="p">(</span><span class="n">term</span><span class="p">),</span> 
+                                             <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">email</span><span class="o">.</span><span class="n">ilike</span><span class="p">(</span><span class="n">term</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="n">user_role</span> <span class="ow">and</span> <span class="n">user_role</span> <span class="o">!=</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+        <span class="n">users_query</span> <span class="o">=</span> <span class="n">users_query</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">user_roles</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">UserRole</span><span class="o">.</span><span class="n">id</span><span class="o">==</span><span class="n">user_role</span><span class="p">)</span>
+    
+    <span class="n">users_pagination</span> <span class="o">=</span> <span class="n">users_query</span><span class="o">.</span><span class="n">paginate</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="n">users_pagination</span><span class="o">.</span><span class="n">items</span>
+
+    <span class="n">metrics</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users</span><span class="p">:</span>
+        <span class="n">user_metrics</span> <span class="o">=</span> <span class="p">{}</span>
+         
+        <span class="n">run_query</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Run</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        
+        <span class="n">user_metrics</span><span class="p">[</span><span class="s2">&quot;num_runs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">run_query</span><span class="o">.</span><span class="n">count</span><span class="p">();</span>
+        <span class="n">user_metrics</span><span class="p">[</span><span class="s2">&quot;last_run&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">run_query</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Run</span><span class="o">.</span><span class="n">submit_time</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+        <span class="n">metrics</span><span class="p">[</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_metrics</span>
+
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;users/view.html&quot;</span><span class="p">,</span> <span class="n">users_pagination</span><span class="o">=</span><span class="n">users_pagination</span><span class="p">,</span>
+                                              <span class="n">users</span><span class="o">=</span><span class="n">users</span><span class="p">,</span>
+                                              <span class="n">metrics</span><span class="o">=</span><span class="n">metrics</span><span class="p">,</span>
+                                              <span class="n">user_role</span><span class="o">=</span><span class="n">user_role</span><span class="p">,</span> 
+                                              <span class="n">search</span><span class="o">=</span><span class="n">user_search</span><span class="p">)</span></div>
+
+
+<span class="nd">@users</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/add/&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">],</span> <span class="n">defaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">})</span>
+<span class="nd">@users</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/edit/&lt;int:user_id&gt;/&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@util</span><span class="o">.</span><span class="n">login_required</span><span class="p">(</span><span class="s2">&quot;operator&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="users_add"><a class="viewcode-back" href="../../../views.admin.html#views.admin.users.users_add">[docs]</a><span class="k">def</span> <span class="nf">users_add</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Displays the user adding and updating page and accepts form submits from those pages.</span>
+
+<span class="sd">    Params:</span>
+<span class="sd">        user_id (int): the user to edit, if this is None a new user will be made</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        a rendered add/edit template or a redirect to the user view page</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;GET&quot;</span><span class="p">:</span> <span class="c1"># display add form</span>
+        <span class="k">return</span> <span class="n">display_user_add_form</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span> <span class="c1"># process added/edited user</span>
+        <span class="k">return</span> <span class="n">add_user</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">current_app</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;invalid user add request method: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span><span class="p">)</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span></div>
+
+
+<span class="nd">@users</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/del/&lt;user_id&gt;/&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@util</span><span class="o">.</span><span class="n">login_required</span><span class="p">(</span><span class="s2">&quot;operator&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="users_del"><a class="viewcode-back" href="../../../views.admin.html#views.admin.users.users_del">[docs]</a><span class="k">def</span> <span class="nf">users_del</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Deletes a user</span>
+
+<span class="sd">    Params:</span>
+<span class="sd">        user_id (int): the user to delete</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        a redirect to the user view page</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">user_id</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="s2">&quot;Failed to delete user </span><span class="se">\&#39;</span><span class="si">{}</span><span class="se">\&#39;</span><span class="s2"> as it does not exist.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+        <span class="n">current_app</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+        <span class="n">flash</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="s2">&quot;danger&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;users.users_view&quot;</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">current_user</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="s2">&quot;Failed to delete user </span><span class="se">\&#39;</span><span class="si">{}</span><span class="se">\&#39;</span><span class="s2"> because user cannot delete itself.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+        <span class="n">current_app</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+        <span class="n">flash</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="s2">&quot;danger&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;users.users_view&quot;</span><span class="p">))</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">flash</span><span class="p">(</span><span class="s2">&quot;Deleted user </span><span class="se">\&#39;</span><span class="si">{}</span><span class="se">\&#39;</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">),</span> <span class="s2">&quot;warning&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">IntegrityError</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="s2">&quot;Failed to delete user </span><span class="se">\&#39;</span><span class="si">{}</span><span class="se">\&#39;</span><span class="s2"> as it&#39;s referenced in another DB element&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+        <span class="n">current_app</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+        <span class="n">flash</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="s2">&quot;danger&quot;</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;users.users_view&quot;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="add_user"><a class="viewcode-back" href="../../../views.admin.html#views.admin.users.add_user">[docs]</a><span class="k">def</span> <span class="nf">add_user</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds or edits a user</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        must be called from within a request context</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        a redirect to the user view page</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;user_id&quot;</span><span class="p">)</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;username&quot;</span><span class="p">)</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
+    <span class="n">confirm_password</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;confirm_password&quot;</span><span class="p">)</span>
+    <span class="n">misc_data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;misc_data&quot;</span><span class="p">)</span>
+    <span class="n">contest_ids</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;contest_ids&quot;</span><span class="p">)</span>
+    <span class="n">user_role_ids</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;user_role_ids&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">password</span> <span class="o">!=</span> <span class="n">confirm_password</span><span class="p">:</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="s2">&quot;Failed to add/edit </span><span class="se">\&#39;</span><span class="si">{}</span><span class="se">\&#39;</span><span class="s2"> due to password mismatch.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">email</span><span class="p">)</span>
+        <span class="n">current_app</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+        <span class="n">flash</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="s2">&quot;danger&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;users.users_view&quot;</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">user_id</span><span class="p">:</span> <span class="c1"># edit</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">user_id</span><span class="p">)</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+        <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">email</span>
+        <span class="n">user</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">user</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span>
+        <span class="k">if</span> <span class="n">password</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">user</span><span class="o">.</span><span class="n">hashed_password</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">hash_password</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+        <span class="n">user</span><span class="o">.</span><span class="n">misc_data</span> <span class="o">=</span> <span class="n">misc_data</span>
+        <span class="n">user</span><span class="o">.</span><span class="n">contests</span> <span class="o">=</span> <span class="n">retrieve_by_ids</span><span class="p">(</span><span class="n">contest_ids</span><span class="o">.</span><span class="n">split</span><span class="p">(),</span> <span class="n">model</span><span class="o">.</span><span class="n">Contest</span><span class="p">)</span>
+        <span class="n">user</span><span class="o">.</span><span class="n">user_roles</span> <span class="o">=</span> <span class="n">retrieve_by_ids</span><span class="p">(</span><span class="n">user_role_ids</span><span class="o">.</span><span class="n">split</span><span class="p">(),</span> <span class="n">model</span><span class="o">.</span><span class="n">UserRole</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span> <span class="c1"># add</span>
+        <span class="k">if</span> <span class="n">is_dup_user_email</span><span class="p">(</span><span class="n">email</span><span class="p">):</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="s2">&quot;Failed to add user </span><span class="se">\&#39;</span><span class="si">{}</span><span class="se">\&#39;</span><span class="s2"> as user already exists.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">email</span><span class="p">)</span>
+            <span class="n">current_app</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+            <span class="n">flash</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="s2">&quot;danger&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;users.users_view&quot;</span><span class="p">))</span>
+
+        <span class="n">user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span>
+                          <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+                          <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span>
+                          <span class="n">misc_data</span><span class="o">=</span><span class="n">misc_data</span><span class="p">,</span>
+                          <span class="n">contests</span><span class="o">=</span><span class="n">retrieve_by_ids</span><span class="p">(</span><span class="n">contest_ids</span><span class="o">.</span><span class="n">split</span><span class="p">(),</span> <span class="n">model</span><span class="o">.</span><span class="n">Contest</span><span class="p">),</span>
+                          <span class="n">user_roles</span><span class="o">=</span><span class="n">retrieve_by_ids</span><span class="p">(</span><span class="n">user_role_ids</span><span class="o">.</span><span class="n">split</span><span class="p">(),</span> <span class="n">model</span><span class="o">.</span><span class="n">UserRole</span><span class="p">),</span>
+                          <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;users.users_view&quot;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="display_user_add_form"><a class="viewcode-back" href="../../../views.admin.html#views.admin.users.display_user_add_form">[docs]</a><span class="k">def</span> <span class="nf">display_user_add_form</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Displays the user add template</span>
+
+<span class="sd">    Params:</span>
+<span class="sd">        user_id (int): user_id</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        a rendered user add/edit template</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">user_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># add</span>
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;users/add_edit.html&quot;</span><span class="p">,</span>
+                               <span class="n">action_label</span><span class="o">=</span><span class="s2">&quot;Add&quot;</span><span class="p">,</span>
+                               <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span> <span class="c1"># edit</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">user_id</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="s2">&quot;Failed to edit user </span><span class="se">\&#39;</span><span class="si">{}</span><span class="se">\&#39;</span><span class="s2"> as user doesn&#39;t exist.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+            <span class="n">current_app</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+            <span class="n">flash</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="s2">&quot;danger&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;users.users_view&quot;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;users/add_edit.html&quot;</span><span class="p">,</span>
+                               <span class="n">action_label</span><span class="o">=</span><span class="s2">&quot;Edit&quot;</span><span class="p">,</span>
+                               <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span></div>
+
+
+<span class="c1">## Util functions</span>
+<div class="viewcode-block" id="is_dup_user_email"><a class="viewcode-back" href="../../../views.admin.html#views.admin.users.is_dup_user_email">[docs]</a><span class="k">def</span> <span class="nf">is_dup_user_email</span><span class="p">(</span><span class="n">email</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks if an email is a duplicate of another user</span>
+
+<span class="sd">    Params:</span>
+<span class="sd">        email (str): the user name to test</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: True if the email is a duplicate, False otherwise</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+    <span class="n">dup_user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">dup_user</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="retrieve_by_ids"><a class="viewcode-back" href="../../../views.admin.html#views.admin.users.retrieve_by_ids">[docs]</a><span class="k">def</span> <span class="nf">retrieve_by_ids</span><span class="p">(</span><span class="n">ids</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieves a list of rows from the given table</span>
+
+<span class="sd">    Params:</span>
+<span class="sd">        ids (list): the ids of tuples to retrieve</span>
+<span class="sd">        table     : the table to retrieve rows from</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: the rows from the database</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">:</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">row</span><span class="p">:</span>
+            <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rows</span></div>
+
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Ben Doan, Sam Nobbs, Micah Swab, Josiah Krutz.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

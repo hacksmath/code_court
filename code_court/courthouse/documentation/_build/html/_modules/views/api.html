@@ -1,0 +1,745 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>views.api &mdash; code_court  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="code_court  documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> code_court
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../event_loop.html">event_loop module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gunicorn_config.html">gunicorn_config module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../model.html">model module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setup.html">setup module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../util.html">util module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../views.html">views package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../web.html">web module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">code_court</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>views.api</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for views.api</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Contains api endpoints for the defendant frontend</span>
+<span class="sd">and external services</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">six</span>
+
+<span class="kn">import</span> <span class="nn">util</span>
+
+<span class="kn">from</span> <span class="nn">flask_httpauth</span> <span class="k">import</span> <span class="n">HTTPBasicAuth</span>
+<span class="kn">from</span> <span class="nn">flask_login</span> <span class="k">import</span> <span class="n">current_user</span><span class="p">,</span> <span class="n">login_user</span><span class="p">,</span> <span class="n">logout_user</span>
+<span class="kn">from</span> <span class="nn">flask_jwt_extended</span> <span class="k">import</span> <span class="n">jwt_required</span><span class="p">,</span> <span class="n">create_access_token</span><span class="p">,</span> <span class="n">get_jwt_identity</span>
+
+
+<span class="kn">from</span> <span class="nn">flask</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">abort</span><span class="p">,</span>
+    <span class="n">Blueprint</span><span class="p">,</span>
+    <span class="n">current_app</span><span class="p">,</span>
+    <span class="n">jsonify</span><span class="p">,</span>
+    <span class="n">make_response</span><span class="p">,</span>
+    <span class="n">render_template</span><span class="p">,</span>
+    <span class="n">request</span><span class="p">,</span>
+    <span class="n">url_for</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">api</span> <span class="o">=</span> <span class="n">Blueprint</span><span class="p">(</span><span class="s1">&#39;api&#39;</span><span class="p">,</span> <span class="n">__name__</span><span class="p">,</span>
+                <span class="n">template_folder</span><span class="o">=</span><span class="s1">&#39;templates&#39;</span><span class="p">)</span>
+<span class="n">executioner_auth</span> <span class="o">=</span> <span class="n">HTTPBasicAuth</span><span class="p">()</span>
+
+<span class="c1"># api auth</span>
+<span class="nd">@executioner_auth</span><span class="o">.</span><span class="n">verify_password</span>
+<div class="viewcode-block" id="verify_password"><a class="viewcode-back" href="../../views.html#views.api.verify_password">[docs]</a><span class="k">def</span> <span class="nf">verify_password</span><span class="p">(</span><span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;verifies a user&#39;s password&quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">user</span><span class="o">.</span><span class="n">verify_password</span><span class="p">(</span><span class="n">password</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+<span class="nd">@executioner_auth</span><span class="o">.</span><span class="n">error_handler</span>
+<div class="viewcode-block" id="unauthorized"><a class="viewcode-back" href="../../views.html#views.api.unauthorized">[docs]</a><span class="k">def</span> <span class="nf">unauthorized</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;make an unathorized access message&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Unauthorized access&#39;</span><span class="p">}),</span> <span class="mi">401</span><span class="p">)</span></div>
+
+<span class="c1"># api routes</span>
+<span class="nd">@api</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/get-writ&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@executioner_auth</span><span class="o">.</span><span class="n">login_required</span>
+<div class="viewcode-block" id="get_writ"><a class="viewcode-back" href="../../views.html#views.api.get_writ">[docs]</a><span class="k">def</span> <span class="nf">get_writ</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;endpoint for executioners to get runs to execute&quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+
+    <span class="c1"># choose oldest priority run</span>
+    <span class="n">chosen_run</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Run</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">is_priority</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">started_execing_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">finished_execing_time</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Run</span><span class="o">.</span><span class="n">submit_time</span><span class="o">.</span><span class="n">asc</span><span class="p">())</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+    <span class="c1"># if no priority runs, choose oldest non-priority run</span>
+    <span class="k">if</span> <span class="n">chosen_run</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">chosen_run</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Run</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">started_execing_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">finished_execing_time</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Run</span><span class="o">.</span><span class="n">submit_time</span><span class="o">.</span><span class="n">asc</span><span class="p">())</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">chosen_run</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;unavailable&#39;</span><span class="p">}),</span> <span class="mi">404</span><span class="p">)</span>
+
+
+    <span class="c1"># TODO: use a better locking method to prevent dual execution</span>
+    <span class="n">chosen_run</span><span class="o">.</span><span class="n">started_execing_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="n">resp</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;found&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;source_code&quot;</span><span class="p">:</span> <span class="n">chosen_run</span><span class="o">.</span><span class="n">source_code</span><span class="p">,</span>
+        <span class="s2">&quot;language&quot;</span><span class="p">:</span> <span class="n">chosen_run</span><span class="o">.</span><span class="n">language</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+        <span class="s2">&quot;run_script&quot;</span><span class="p">:</span> <span class="n">chosen_run</span><span class="o">.</span><span class="n">language</span><span class="o">.</span><span class="n">run_script</span><span class="p">,</span>
+        <span class="s2">&quot;input&quot;</span><span class="p">:</span> <span class="n">chosen_run</span><span class="o">.</span><span class="n">run_input</span><span class="p">,</span>
+        <span class="s2">&quot;run_id&quot;</span><span class="p">:</span> <span class="n">chosen_run</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="s2">&quot;return_url&quot;</span><span class="p">:</span> <span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;api.submit_writ&quot;</span><span class="p">,</span> <span class="n">run_id</span><span class="o">=</span><span class="n">chosen_run</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">_external</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">(</span><span class="n">resp</span><span class="p">),</span> <span class="mi">200</span><span class="p">)</span></div>
+
+<span class="nd">@api</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/submit-writ/&lt;run_id&gt;&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="nd">@executioner_auth</span><span class="o">.</span><span class="n">login_required</span>
+<div class="viewcode-block" id="submit_writ"><a class="viewcode-back" href="../../views.html#views.api.submit_writ">[docs]</a><span class="k">def</span> <span class="nf">submit_writ</span><span class="p">(</span><span class="n">run_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;endpoint for executioners to submit runs</span>
+
+<span class="sd">    Looking for the format:</span>
+<span class="sd">    {</span>
+<span class="sd">        &quot;output&quot;: &quot;...&quot;</span>
+<span class="sd">    }</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+    <span class="n">run</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Run</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">run_id</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">run</span><span class="p">:</span>
+        <span class="n">current_app</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Received writ without valid run, id: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_id</span><span class="p">)</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">404</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">run</span><span class="o">.</span><span class="n">finished_execing_time</span><span class="p">:</span>
+        <span class="n">current_app</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Received writ submission for already submitted run, id: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_id</span><span class="p">)</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="p">:</span>
+        <span class="n">current_app</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Received writ without json&quot;</span><span class="p">)</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s1">&#39;output&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">],</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+        <span class="n">current_app</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Received writ without the output field&quot;</span><span class="p">)</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span>
+
+    <span class="n">run</span><span class="o">.</span><span class="n">run_output</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;output&#39;</span><span class="p">)</span>
+    <span class="n">run</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">run</span><span class="o">.</span><span class="n">state</span>
+    <span class="n">run</span><span class="o">.</span><span class="n">finished_execing_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">run</span><span class="o">.</span><span class="n">is_submission</span><span class="p">:</span>
+        <span class="n">is_correct</span> <span class="o">=</span> <span class="n">clean_output_string</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">run_output</span><span class="p">)</span> <span class="o">==</span> <span class="n">clean_output_string</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">correct_output</span><span class="p">)</span>
+        <span class="n">run</span><span class="o">.</span><span class="n">is_passed</span> <span class="o">=</span> <span class="n">is_correct</span>
+
+        <span class="k">if</span> <span class="n">run</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s2">&quot;Successful&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_correct</span><span class="p">:</span>
+            <span class="n">run</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s2">&quot;Failed&quot;</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+    <span class="k">return</span> <span class="s2">&quot;Good&quot;</span></div>
+
+<span class="nd">@api</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/return-without-run/&lt;run_id&gt;&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="nd">@executioner_auth</span><span class="o">.</span><span class="n">login_required</span>
+<div class="viewcode-block" id="return_without_run"><a class="viewcode-back" href="../../views.html#views.api.return_without_run">[docs]</a><span class="k">def</span> <span class="nf">return_without_run</span><span class="p">(</span><span class="n">run_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Allows for executors to return a writ without running if they are</span>
+<span class="sd">    experiencing errors or are shutting down</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+    <span class="n">run</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Run</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">run_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">run</span><span class="p">:</span>
+        <span class="n">current_app</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Received writ without valid run, id: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_id</span><span class="p">)</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">404</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">run</span><span class="o">.</span><span class="n">finished_execing_time</span><span class="p">:</span>
+        <span class="n">current_app</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Received return for already returned writ, id: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">run_id</span><span class="p">)</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span>
+
+    <span class="n">run</span><span class="o">.</span><span class="n">started_execing_time</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="s2">&quot;Good&quot;</span></div>
+
+<span class="nd">@api</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<div class="viewcode-block" id="login"><a class="viewcode-back" href="../../views.html#views.api.login">[docs]</a><span class="k">def</span> <span class="nf">login</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;log in a user&quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+
+    <span class="n">email</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;password&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">user</span> <span class="ow">and</span> <span class="n">user</span><span class="o">.</span><span class="n">verify_password</span><span class="p">(</span><span class="n">password</span><span class="p">):</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;access_token&#39;</span><span class="p">:</span> <span class="n">create_access_token</span><span class="p">(</span><span class="n">identity</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)}</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">ret</span><span class="p">),</span> <span class="mi">200</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;msg&quot;</span><span class="p">:</span> <span class="s2">&quot;Bad username or password&quot;</span><span class="p">}),</span> <span class="mi">401</span></div>
+
+<span class="nd">@api</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/problem/&lt;slug&gt;&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<div class="viewcode-block" id="get_problem"><a class="viewcode-back" href="../../views.html#views.api.get_problem">[docs]</a><span class="k">def</span> <span class="nf">get_problem</span><span class="p">(</span><span class="n">slug</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;get a specified problem&quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+
+    <span class="n">problem</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Problem</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">(</span><span class="n">problem</span><span class="o">.</span><span class="n">get_output_dict</span><span class="p">()),</span> <span class="mi">200</span><span class="p">)</span></div>
+
+<span class="nd">@api</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/problems&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@jwt_required</span>
+<div class="viewcode-block" id="get_all_problems"><a class="viewcode-back" href="../../views.html#views.api.get_all_problems">[docs]</a><span class="k">def</span> <span class="nf">get_all_problems</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;get all problems&quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+
+    <span class="n">current_user_id</span> <span class="o">=</span> <span class="n">get_jwt_identity</span><span class="p">()</span>
+    <span class="n">current_user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">current_user_id</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+    <span class="n">problems</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Problem</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">is_enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+    <span class="n">resp</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">problem</span> <span class="ow">in</span> <span class="n">problems</span><span class="p">:</span>
+        <span class="n">problem_runs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Run</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">current_user</span><span class="p">,</span> <span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">problem_run_dicts</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">get_output_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">problem_runs</span><span class="p">]</span>
+
+        <span class="n">problem_dict</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">get_output_dict</span><span class="p">()</span>
+        <span class="n">problem_dict</span><span class="p">[</span><span class="s1">&#39;runs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">problem_run_dicts</span>
+
+        <span class="n">resp</span><span class="p">[</span><span class="n">problem</span><span class="o">.</span><span class="n">slug</span><span class="p">]</span> <span class="o">=</span> <span class="n">problem_dict</span>
+
+    <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">(</span><span class="n">resp</span><span class="p">),</span> <span class="mi">200</span><span class="p">)</span></div>
+
+<span class="nd">@api</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/clarifications&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@jwt_required</span>
+<div class="viewcode-block" id="get_clarifications"><a class="viewcode-back" href="../../views.html#views.api.get_clarifications">[docs]</a><span class="k">def</span> <span class="nf">get_clarifications</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;get all clarifications&quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+
+    <span class="n">current_user_id</span> <span class="o">=</span> <span class="n">get_jwt_identity</span><span class="p">()</span>
+    <span class="n">current_user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">current_user_id</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+    <span class="n">clarifications</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Clarification</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">or_</span><span class="p">(</span><span class="n">is_public</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">initiating_user</span><span class="o">=</span><span class="n">user</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+    <span class="n">resp</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">get_output_dict</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">clarifications</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">(</span><span class="n">resp</span><span class="p">),</span> <span class="mi">200</span><span class="p">)</span></div>
+
+<span class="nd">@api</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/submit_clarification&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="nd">@jwt_required</span>
+<div class="viewcode-block" id="submit_clarification"><a class="viewcode-back" href="../../views.html#views.api.submit_clarification">[docs]</a><span class="k">def</span> <span class="nf">submit_clarification</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;submit a clarification&quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+
+    <span class="n">current_user_id</span> <span class="o">=</span> <span class="n">get_jwt_identity</span><span class="p">()</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">current_user_id</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+    <span class="n">subject</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;subject&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">contents</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;contents&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">problem_slug</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;problem_slug&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">parent_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;parent_id&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">problem</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Problem</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">slug</span><span class="o">=</span><span class="n">problem_slug</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+    <span class="c1">#if problem == None:</span>
+
+    <span class="n">thread</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">parent_id</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">thread</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">thread</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Clarification</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">parent_id</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span><span class="o">.</span><span class="n">thread</span>
+
+    <span class="n">is_public</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1">#user submitted clarifications are always false</span>
+    <span class="n">clar</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Clarification</span><span class="p">(</span><span class="n">current_user</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">thread</span><span class="p">,</span> <span class="n">is_public</span><span class="p">)</span>
+    <span class="n">clar</span><span class="o">.</span><span class="n">problem</span> <span class="o">=</span> <span class="n">problem</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">clar</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span></div>
+
+
+<span class="nd">@api</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/languages&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<div class="viewcode-block" id="get_languages"><a class="viewcode-back" href="../../views.html#views.api.get_languages">[docs]</a><span class="k">def</span> <span class="nf">get_languages</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;get all languages&quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+
+    <span class="n">langs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Language</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">filter_langs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">get_output_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">langs</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">is_enabled</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">(</span><span class="n">filter_langs</span><span class="p">),</span> <span class="mi">200</span><span class="p">)</span></div>
+
+<span class="nd">@api</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/current-user&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@jwt_required</span>
+<div class="viewcode-block" id="get_current_user"><a class="viewcode-back" href="../../views.html#views.api.get_current_user">[docs]</a><span class="k">def</span> <span class="nf">get_current_user</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;get the currently authenticated user&quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+
+    <span class="n">current_user_id</span> <span class="o">=</span> <span class="n">get_jwt_identity</span><span class="p">()</span>
+    <span class="n">current_user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">current_user_id</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+    <span class="n">resp</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">current_user</span><span class="p">:</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">get_output_dict</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">(</span><span class="n">resp</span><span class="p">),</span> <span class="mi">200</span><span class="p">)</span></div>
+
+
+<span class="nd">@api</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/submit-run&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="nd">@jwt_required</span>
+<div class="viewcode-block" id="submit_run"><a class="viewcode-back" href="../../views.html#views.api.submit_run">[docs]</a><span class="k">def</span> <span class="nf">submit_run</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;submit a run to be executed&quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+
+    <span class="n">current_user_id</span> <span class="o">=</span> <span class="n">get_jwt_identity</span><span class="p">()</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">current_user_id</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+    <span class="n">MAX_RUNS</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_configuration</span><span class="p">(</span><span class="s2">&quot;max_user_submissions&quot;</span><span class="p">)</span>
+    <span class="n">TIME_LIMIT</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_configuration</span><span class="p">(</span><span class="s2">&quot;user_submission_time_limit&quot;</span><span class="p">)</span>
+
+    <span class="n">over_limit_runs_query</span><span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Run</span><span class="o">.</span><span class="n">submit_time</span> <span class="o">&gt;</span>\
+                            <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="n">TIME_LIMIT</span><span class="p">))</span>
+    <span class="n">run_count</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Run</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>\
+                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">over_limit_runs_query</span><span class="p">)</span>\
+                    <span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">run_count</span> <span class="o">&gt;</span> <span class="n">MAX_RUNS</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Submission rate limit exceeded&#39;</span><span class="p">}),</span> <span class="mi">400</span><span class="p">)</span>
+
+    <span class="n">contest</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">contests</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+    <span class="n">lang_name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lang&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">problem_slug</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;problem_slug&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">source_code</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;source_code&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">is_submission</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;is_submission&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">user_test_input</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;user_test_input&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">lang</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Language</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">lang_name</span><span class="p">)</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+    <span class="n">problem</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Problem</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">slug</span><span class="o">=</span><span class="n">problem_slug</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+    <span class="n">run_input</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">run_output</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">is_submission</span><span class="p">:</span>
+        <span class="n">run_input</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">secret_input</span>
+        <span class="n">run_output</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">secret_output</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">user_test_input</span><span class="p">:</span>
+            <span class="n">run_input</span> <span class="o">=</span> <span class="n">user_test_input</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">run_input</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">sample_input</span>
+        <span class="n">run_output</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">sample_output</span>
+
+    <span class="n">run</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Run</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">contest</span><span class="p">,</span>
+                    <span class="n">lang</span><span class="p">,</span> <span class="n">problem</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">(),</span> <span class="n">source_code</span><span class="p">,</span>
+                    <span class="n">run_input</span><span class="p">,</span> <span class="n">run_output</span><span class="p">,</span> <span class="n">is_submission</span><span class="p">)</span>
+    <span class="n">run</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s2">&quot;Judging&quot;</span>
+
+    <span class="n">resp</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">contest</span><span class="o">.</span><span class="n">end_time</span><span class="p">:</span>
+        <span class="n">run</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s2">&quot;ContestEnded&quot;</span>
+        <span class="n">run</span><span class="o">.</span><span class="n">started_execing_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="n">run</span><span class="o">.</span><span class="n">finished_execing_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Contest has ended&#39;</span><span class="p">}),</span> <span class="mi">400</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">contest</span><span class="o">.</span><span class="n">start_time</span><span class="p">:</span>
+        <span class="n">run</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s2">&quot;ContestHasNotBegun&quot;</span>
+        <span class="n">run</span><span class="o">.</span><span class="n">started_execing_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="n">run</span><span class="o">.</span><span class="n">finished_execing_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Contest has not begun&#39;</span><span class="p">}),</span> <span class="mi">400</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;good&#39;</span><span class="p">}),</span> <span class="mi">200</span><span class="p">)</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">resp</span></div>
+
+<span class="nd">@api</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/scores&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@jwt_required</span>
+<div class="viewcode-block" id="get_scoreboard"><a class="viewcode-back" href="../../views.html#views.api.get_scoreboard">[docs]</a><span class="k">def</span> <span class="nf">get_scoreboard</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;get the scoreboard&quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+
+    <span class="n">current_user_id</span> <span class="o">=</span> <span class="n">get_jwt_identity</span><span class="p">()</span>
+    <span class="n">current_user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">current_user_id</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_user</span><span class="o">.</span><span class="n">contests</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;User has no contests&#39;</span><span class="p">}),</span> <span class="mi">400</span><span class="p">)</span>
+
+
+    <span class="n">contest</span> <span class="o">=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">contests</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">defendants</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span>\
+                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">user_roles</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;defendant&quot;</span><span class="p">))</span>\
+                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">contests</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">contest</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>\
+                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+    <span class="n">problems</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Problem</span><span class="o">.</span><span class="n">query</span>\
+                <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Problem</span><span class="o">.</span><span class="n">contests</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">contest</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>\
+                <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Problem</span><span class="o">.</span><span class="n">is_enabled</span><span class="p">)</span>\
+                <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+    <span class="n">user_points</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">defendants</span><span class="p">:</span>
+        <span class="n">problem_states</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">penalty</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">problem</span> <span class="ow">in</span> <span class="n">problems</span><span class="p">:</span>
+            <span class="n">is_passed</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Run</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">is_submission</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                                    <span class="n">is_passed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                                    <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+                                                    <span class="n">contest</span><span class="o">=</span><span class="n">contest</span><span class="p">,</span>
+                                                    <span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+            <span class="n">problem_states</span><span class="p">[</span><span class="n">problem</span><span class="o">.</span><span class="n">slug</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_passed</span>
+
+            <span class="n">failed_subs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Run</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">is_submission</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                                    <span class="n">is_passed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                                    <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+                                                    <span class="n">contest</span><span class="o">=</span><span class="n">contest</span><span class="p">,</span>
+                                                    <span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">failed_subs</span><span class="p">:</span>
+                <span class="n">penalty</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c1"># TODO we may want to use the time submitted instead of 1</span>
+                             <span class="c1">#      to match ICPC scoring</span>
+
+        <span class="n">user_points</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">get_output_dict</span><span class="p">(),</span>
+                            <span class="s2">&quot;num_solved&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">problem_states</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">x</span><span class="p">]),</span>
+                            <span class="s2">&quot;penalty&quot;</span><span class="p">:</span> <span class="n">penalty</span><span class="p">,</span>
+                            <span class="s2">&quot;problem_states&quot;</span><span class="p">:</span> <span class="n">problem_states</span><span class="p">})</span>
+
+    <span class="n">user_points</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;num_solved&quot;</span><span class="p">],</span> <span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;penalty&quot;</span><span class="p">]),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">(</span><span class="n">user_points</span><span class="p">))</span></div>
+
+
+<span class="nd">@api</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/get-contest-info&quot;</span><span class="p">)</span>
+<span class="nd">@jwt_required</span>
+<div class="viewcode-block" id="get_contest_info"><a class="viewcode-back" href="../../views.html#views.api.get_contest_info">[docs]</a><span class="k">def</span> <span class="nf">get_contest_info</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;get contest info on current user&quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+
+    <span class="n">current_user_id</span> <span class="o">=</span> <span class="n">get_jwt_identity</span><span class="p">()</span>
+    <span class="n">current_user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">current_user_id</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+    <span class="n">contests</span> <span class="o">=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">contests</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">contests</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;User has multiple contests&#39;</span><span class="p">}),</span> <span class="mi">500</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">contests</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;User has no contests&#39;</span><span class="p">}),</span> <span class="mi">400</span><span class="p">)</span>
+
+    <span class="n">contest</span> <span class="o">=</span> <span class="n">contests</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">(</span><span class="n">contest</span><span class="o">.</span><span class="n">get_output_dict</span><span class="p">()))</span></div>
+
+<span class="nd">@api</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/make-defendant-user&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="nd">@jwt_required</span>
+<div class="viewcode-block" id="make_user"><a class="viewcode-back" href="../../views.html#views.api.make_user">[docs]</a><span class="k">def</span> <span class="nf">make_user</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    To test manually:</span>
+<span class="sd">    - get auth token: curl -H &quot;Content-Type: application/json&quot; --data &#39;{&quot;email&quot;: &quot;admin@example.org&quot;, &quot;password&quot;: &quot;pass&quot;}&#39; http://localhost:9191/api/login</span>
+<span class="sd">    - make request: curl -H &quot;Authorization: Bearer *token_goes_here*&quot; -H &quot;Content-Type: application/json&quot; --data &#39;{&quot;name&quot;: &quot;Ben&quot;, &quot;email&quot;: &quot;ben@bendoan.me&quot;, &quot;password&quot;: &quot;pass&quot;}&#39; http://localhost:9191/api/make-defendant-user</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+
+    <span class="n">current_user_id</span> <span class="o">=</span> <span class="n">get_jwt_identity</span><span class="p">()</span>
+    <span class="n">current_user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">current_user_id</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;judge&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current_user</span><span class="o">.</span><span class="n">user_roles</span> <span class="ow">and</span>
+        <span class="s2">&quot;operator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current_user</span><span class="o">.</span><span class="n">user_roles</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Unauthorized access&#39;</span><span class="p">}),</span> <span class="mi">401</span><span class="p">)</span>
+
+    <span class="n">email</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;password&#39;</span><span class="p">)</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;username&#39;</span><span class="p">)</span>
+    <span class="n">contest_name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;contest_name&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">([</span><span class="n">email</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">contest_name</span><span class="p">]):</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Invalid request, missing fields&#39;</span><span class="p">}),</span> <span class="mi">400</span><span class="p">)</span>
+
+    <span class="n">existing_user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">existing_user</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Invalid request, user already exists&#39;</span><span class="p">}),</span> <span class="mi">400</span><span class="p">)</span>
+
+    <span class="n">defedant_role</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">UserRole</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;defendant&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+    <span class="n">new_user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span> <span class="n">user_roles</span><span class="o">=</span><span class="p">[</span><span class="n">defedant_role</span><span class="p">],</span> <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">)</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_user</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="n">contest</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Contest</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">contest_name</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">contest</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Invalid contest name&#39;</span><span class="p">}),</span> <span class="mi">400</span><span class="p">)</span>
+
+    <span class="n">new_user</span><span class="o">.</span><span class="n">contests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">contest</span><span class="p">)</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;Success&#39;</span><span class="p">}),</span> <span class="mi">200</span><span class="p">)</span></div>
+
+
+<span class="nd">@api</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/update-user-metadata&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="nd">@jwt_required</span>
+<div class="viewcode-block" id="update_user_metadata"><a class="viewcode-back" href="../../views.html#views.api.update_user_metadata">[docs]</a><span class="k">def</span> <span class="nf">update_user_metadata</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;update user metadata&quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+
+    <span class="n">current_user_id</span> <span class="o">=</span> <span class="n">get_jwt_identity</span><span class="p">()</span>
+    <span class="n">current_user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">current_user_id</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;judge&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current_user</span><span class="o">.</span><span class="n">user_roles</span> <span class="ow">and</span>
+        <span class="s2">&quot;operator&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current_user</span><span class="o">.</span><span class="n">user_roles</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Unauthorized access&#39;</span><span class="p">}),</span> <span class="mi">401</span><span class="p">)</span>
+
+    <span class="n">user_email</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;user_email&#39;</span><span class="p">)</span>
+    <span class="n">user_misc_metadata</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;misc_metadata&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">([</span><span class="n">user_email</span><span class="p">,</span> <span class="n">user_misc_metadata</span><span class="p">]):</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Invalid request, missing field&#39;</span><span class="p">}),</span> <span class="mi">400</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">user_misc_metadata</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Invalid request, misc_metadata must be a dict&#39;</span><span class="p">}),</span> <span class="mi">400</span><span class="p">)</span>
+
+    <span class="n">matching_user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">user_email</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">matching_user</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s2">&quot;Invalid request, Couldn&#39;t find user&quot;</span><span class="p">}),</span> <span class="mi">400</span><span class="p">)</span>
+
+    <span class="n">matching_user</span><span class="o">.</span><span class="n">merge_metadata</span><span class="p">(</span><span class="n">user_misc_metadata</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;Success&#39;</span><span class="p">}),</span> <span class="mi">200</span><span class="p">)</span></div>
+
+<span class="nd">@api</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/signout/&lt;email&gt;&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<span class="nd">@util</span><span class="o">.</span><span class="n">login_required</span><span class="p">(</span><span class="s2">&quot;operator&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="signout_user"><a class="viewcode-back" href="../../views.html#views.api.signout_user">[docs]</a><span class="k">def</span> <span class="nf">signout_user</span><span class="p">(</span><span class="n">email</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;signout a specified user&quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+
+    <span class="n">matching_user</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">)</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">matching_user</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s2">&quot;Invalid request, couldn&#39;t find user&quot;</span><span class="p">}),</span> <span class="mi">400</span><span class="p">)</span>
+
+    <span class="n">matching_user</span><span class="o">.</span><span class="n">merge_metadata</span><span class="p">({</span><span class="s2">&quot;signout&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())})</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;Success&#39;</span><span class="p">}),</span> <span class="mi">200</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="clean_output_string"><a class="viewcode-back" href="../../views.html#views.api.clean_output_string">[docs]</a><span class="k">def</span> <span class="nf">clean_output_string</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Cleans up an output string for comparison&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
+
+<span class="nd">@api</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<div class="viewcode-block" id="index"><a class="viewcode-back" href="../../views.html#views.api.index">[docs]</a><span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">404</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Ben Doan, Sam Nobbs, Micah Swab, Josiah Krutz.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

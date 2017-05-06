@@ -1,0 +1,505 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>views package &mdash; code_court  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="code_court  documentation" href="index.html"/>
+        <link rel="next" title="views.admin package" href="views.admin.html"/>
+        <link rel="prev" title="util module" href="util.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> code_court
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="event_loop.html">event_loop module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gunicorn_config.html">gunicorn_config module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">model module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">setup module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">util module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">views package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="views.admin.html">views.admin package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-views.api">views.api module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-views.auth">views.auth module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-views.defendant">views.defendant module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-views.main">views.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-views">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="web.html">web module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">code_court</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>views package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/views.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="views-package">
+<h1>views package<a class="headerlink" href="#views-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="views.admin.html">views.admin package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="views.admin.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.admin.html#module-views.admin.admin">views.admin.admin module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.admin.html#module-views.admin.clarifications">views.admin.clarifications module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.admin.html#module-views.admin.configurations">views.admin.configurations module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.admin.html#module-views.admin.contests">views.admin.contests module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.admin.html#module-views.admin.languages">views.admin.languages module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.admin.html#module-views.admin.problems">views.admin.problems module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.admin.html#module-views.admin.runs">views.admin.runs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.admin.html#module-views.admin.users">views.admin.users module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="views.admin.html#module-views.admin">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-views.api">
+<span id="views-api-module"></span><h2>views.api module<a class="headerlink" href="#module-views.api" title="Permalink to this headline">¶</a></h2>
+<p>Contains api endpoints for the defendant frontend
+and external services</p>
+<dl class="function">
+<dt id="views.api.clean_output_string">
+<code class="descclassname">views.api.</code><code class="descname">clean_output_string</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#clean_output_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.clean_output_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cleans up an output string for comparison</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.api.get_all_problems">
+<code class="descclassname">views.api.</code><code class="descname">get_all_problems</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#get_all_problems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.get_all_problems" title="Permalink to this definition">¶</a></dt>
+<dd><p>get all problems</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.api.get_clarifications">
+<code class="descclassname">views.api.</code><code class="descname">get_clarifications</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#get_clarifications"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.get_clarifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>get all clarifications</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.api.get_contest_info">
+<code class="descclassname">views.api.</code><code class="descname">get_contest_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#get_contest_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.get_contest_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>get contest info on current user</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.api.get_current_user">
+<code class="descclassname">views.api.</code><code class="descname">get_current_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#get_current_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.get_current_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the currently authenticated user</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.api.get_languages">
+<code class="descclassname">views.api.</code><code class="descname">get_languages</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#get_languages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.get_languages" title="Permalink to this definition">¶</a></dt>
+<dd><p>get all languages</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.api.get_problem">
+<code class="descclassname">views.api.</code><code class="descname">get_problem</code><span class="sig-paren">(</span><em>slug</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#get_problem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.get_problem" title="Permalink to this definition">¶</a></dt>
+<dd><p>get a specified problem</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.api.get_scoreboard">
+<code class="descclassname">views.api.</code><code class="descname">get_scoreboard</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#get_scoreboard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.get_scoreboard" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the scoreboard</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.api.get_writ">
+<code class="descclassname">views.api.</code><code class="descname">get_writ</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#get_writ"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.get_writ" title="Permalink to this definition">¶</a></dt>
+<dd><p>endpoint for executioners to get runs to execute</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.api.index">
+<code class="descclassname">views.api.</code><code class="descname">index</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="views.api.login">
+<code class="descclassname">views.api.</code><code class="descname">login</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#login"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>log in a user</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.api.make_user">
+<code class="descclassname">views.api.</code><code class="descname">make_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#make_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.make_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>To test manually:
+- get auth token: curl -H &#8220;Content-Type: application/json&#8221; &#8211;data &#8216;{&#8220;email&#8221;: &#8220;<a class="reference external" href="mailto:admin&#37;&#52;&#48;example&#46;org">admin<span>&#64;</span>example<span>&#46;</span>org</a>&#8221;, &#8220;password&#8221;: &#8220;pass&#8221;}&#8217; <a class="reference external" href="http://localhost:9191/api/login">http://localhost:9191/api/login</a>
+- make request: curl -H &#8220;Authorization: Bearer <em>token_goes_here</em>&#8221; -H &#8220;Content-Type: application/json&#8221; &#8211;data &#8216;{&#8220;name&#8221;: &#8220;Ben&#8221;, &#8220;email&#8221;: &#8220;<a class="reference external" href="mailto:ben&#37;&#52;&#48;bendoan&#46;me">ben<span>&#64;</span>bendoan<span>&#46;</span>me</a>&#8221;, &#8220;password&#8221;: &#8220;pass&#8221;}&#8217; <a class="reference external" href="http://localhost:9191/api/make-defendant-user">http://localhost:9191/api/make-defendant-user</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.api.return_without_run">
+<code class="descclassname">views.api.</code><code class="descname">return_without_run</code><span class="sig-paren">(</span><em>run_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#return_without_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.return_without_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows for executors to return a writ without running if they are
+experiencing errors or are shutting down</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.api.signout_user">
+<code class="descclassname">views.api.</code><code class="descname">signout_user</code><span class="sig-paren">(</span><em>email</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#signout_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.signout_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>signout a specified user</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.api.submit_clarification">
+<code class="descclassname">views.api.</code><code class="descname">submit_clarification</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#submit_clarification"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.submit_clarification" title="Permalink to this definition">¶</a></dt>
+<dd><p>submit a clarification</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.api.submit_run">
+<code class="descclassname">views.api.</code><code class="descname">submit_run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#submit_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.submit_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>submit a run to be executed</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.api.submit_writ">
+<code class="descclassname">views.api.</code><code class="descname">submit_writ</code><span class="sig-paren">(</span><em>run_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#submit_writ"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.submit_writ" title="Permalink to this definition">¶</a></dt>
+<dd><p>endpoint for executioners to submit runs</p>
+<p>Looking for the format:
+{</p>
+<blockquote>
+<div>&#8220;output&#8221;: &#8221;...&#8221;</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.api.unauthorized">
+<code class="descclassname">views.api.</code><code class="descname">unauthorized</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#unauthorized"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.unauthorized" title="Permalink to this definition">¶</a></dt>
+<dd><p>make an unathorized access message</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.api.update_user_metadata">
+<code class="descclassname">views.api.</code><code class="descname">update_user_metadata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#update_user_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.update_user_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>update user metadata</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.api.verify_password">
+<code class="descclassname">views.api.</code><code class="descname">verify_password</code><span class="sig-paren">(</span><em>email</em>, <em>password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/api.html#verify_password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.api.verify_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>verifies a user&#8217;s password</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-views.auth">
+<span id="views-auth-module"></span><h2>views.auth module<a class="headerlink" href="#module-views.auth" title="Permalink to this headline">¶</a></h2>
+<p>Contains routes for handling authentication</p>
+<dl class="function">
+<dt id="views.auth.login_submit">
+<code class="descclassname">views.auth.</code><code class="descname">login_submit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/auth.html#login_submit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.auth.login_submit" title="Permalink to this definition">¶</a></dt>
+<dd><p>processes login requests</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.auth.login_view">
+<code class="descclassname">views.auth.</code><code class="descname">login_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/auth.html#login_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.auth.login_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>general login page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.auth.logout_submit">
+<code class="descclassname">views.auth.</code><code class="descname">logout_submit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/auth.html#logout_submit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.auth.logout_submit" title="Permalink to this definition">¶</a></dt>
+<dd><p>processes logout requests</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.auth.profile">
+<code class="descclassname">views.auth.</code><code class="descname">profile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/auth.html#profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.auth.profile" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns profile page</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-views.defendant">
+<span id="views-defendant-module"></span><h2>views.defendant module<a class="headerlink" href="#module-views.defendant" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="views.defendant.RunState">
+<em class="property">class </em><code class="descclassname">views.defendant.</code><code class="descname">RunState</code><a class="headerlink" href="#views.defendant.RunState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="views.defendant.RunState.failed">
+<code class="descname">failed</code><em class="property"> = 3</em><a class="headerlink" href="#views.defendant.RunState.failed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="views.defendant.RunState.judging">
+<code class="descname">judging</code><em class="property"> = 1</em><a class="headerlink" href="#views.defendant.RunState.judging" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="views.defendant.RunState.passed">
+<code class="descname">passed</code><em class="property"> = 2</em><a class="headerlink" href="#views.defendant.RunState.passed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="views.defendant.index">
+<code class="descclassname">views.defendant.</code><code class="descname">index</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/defendant.html#index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.defendant.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>The index page for the defendant frontend</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>a rendered defendant view template which shows all available problems</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="views.defendant.problem">
+<code class="descclassname">views.defendant.</code><code class="descname">problem</code><span class="sig-paren">(</span><em>problem_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/defendant.html#problem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.defendant.problem" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="views.defendant.scoreboard">
+<code class="descclassname">views.defendant.</code><code class="descname">scoreboard</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/defendant.html#scoreboard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.defendant.scoreboard" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="views.defendant.submissions">
+<code class="descclassname">views.defendant.</code><code class="descname">submissions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/defendant.html#submissions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.defendant.submissions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="views.defendant.submit_code">
+<code class="descclassname">views.defendant.</code><code class="descname">submit_code</code><span class="sig-paren">(</span><em>problem</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/defendant.html#submit_code"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.defendant.submit_code" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a Run object and adds it to the database</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>problem: the problem source_code is being submitted to</dd>
+<dt>Returns:</dt>
+<dd>the submitted source_code as a string</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-views.main">
+<span id="views-main-module"></span><h2>views.main module<a class="headerlink" href="#module-views.main" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="views.main.send_flask_static">
+<code class="descclassname">views.main.</code><code class="descname">send_flask_static</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/views/main.html#send_flask_static"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#views.main.send_flask_static" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-views">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-views" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="views.admin.html" class="btn btn-neutral float-right" title="views.admin package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="util.html" class="btn btn-neutral" title="util module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Ben Doan, Sam Nobbs, Micah Swab, Josiah Krutz.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
